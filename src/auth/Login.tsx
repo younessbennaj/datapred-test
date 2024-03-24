@@ -25,7 +25,7 @@ export const Login = () => {
       headers: { Authorization: "Basic " + encodedToken },
     };
 
-    doFetch(config);
+    doFetch({ config });
   };
 
   if (data) {
