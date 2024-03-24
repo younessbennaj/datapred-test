@@ -1,8 +1,12 @@
 import * as React from "react";
 import { useState } from "react";
+import { useFetch } from "../hooks/useFetch";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
-  const [userName, setUserName] = useState("");
+  const { data, doFetch, loading } = useFetch("/auth/");
+  const navigate = useNavigate();
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value);
@@ -12,8 +16,19 @@ export const Login = () => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(userName, password);
+    const token = `${username}:${password}`;
+    const encodedToken = btoa(token);
+    const config = {
+      headers: { Authorization: "Basic " + encodedToken },
+    };
+
+    doFetch(config);
   };
+
+  if (data) {
+    localStorage.setItem("token", data || "");
+    navigate("/");
+  }
   return (
     <div>
       <h1>Login</h1>
@@ -25,7 +40,7 @@ export const Login = () => {
             type="text"
             name="username"
             id="username"
-            value={userName}
+            value={username}
           />
         </div>
         <div>
@@ -38,7 +53,7 @@ export const Login = () => {
             value={password}
           />
         </div>
-        <button>Login</button>
+        <button disabled={loading}>Login</button>
       </form>
     </div>
   );

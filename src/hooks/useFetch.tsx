@@ -1,23 +1,25 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-
-export const fetchApi = axios.create({
-  baseURL: "",
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  },
-});
+import axios, { AxiosRequestConfig } from "axios";
+import { fetchApi } from "../requests/fetchApi";
 
 export const useFetch = (url: string) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [config, setConfig] = useState<AxiosRequestConfig | undefined>(
+    undefined
+  );
   const [error, setError] = useState<null | string>(null);
+
+  const doFetch = (config?: AxiosRequestConfig | undefined) => {
+    setConfig(config);
+    setLoading(true);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchApi.get(url);
+        const response = await fetchApi.get(url, config);
         setData(response.data);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
@@ -27,9 +29,10 @@ export const useFetch = (url: string) => {
         setLoading(false);
       }
     };
+    if (loading) {
+      fetchData();
+    }
+  }, [url, config, loading]);
 
-    fetchData();
-  });
-
-  return { data, error, loading };
+  return { data, doFetch, error, loading };
 };
