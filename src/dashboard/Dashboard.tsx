@@ -3,27 +3,9 @@ import { useFetch } from "../hooks/useFetch";
 import { Label } from "../common/Label";
 import { Button } from "../common/Button";
 import { TrendCard } from "./TrendCard";
-
-type Run = {
-  complete: boolean;
-  flow: number;
-  id: number;
-  production_date: string;
-};
-
-type Trend = {
-  horizon: number;
-  horizon_date: string;
-  horizon_frequency: string;
-  horizon_name: string;
-  id: number;
-  output: number;
-  output_type: string;
-  trend: number;
-};
+import { Run, Trend } from "./types";
 
 export const Dashboard = () => {
-  //Accepted date format is in ISO 8601 zero UTC offset
   const [productionDate, setProductionDate] = useState<string>("2021-01-01");
 
   const { data: flow, doFetch: fetchFlow } = useFetch("/flows/1");

@@ -1,10 +1,5 @@
 import { Link } from "react-router-dom";
-
-type NavItem = {
-  name: string;
-  path: string;
-  isActive: boolean;
-};
+import { NavItem } from "./types";
 
 export const Nav = ({ navItems }: { navItems: NavItem[] }) => {
   return (

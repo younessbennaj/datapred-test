@@ -1,14 +1,11 @@
+import { ButtonProps } from "./types";
+
 export const Button = ({
   className,
   children,
   disabled,
   onClick,
-}: {
-  className?: string;
-  children: React.ReactNode;
-  disabled?: boolean;
-  onClick?: () => void;
-}) => {
+}: ButtonProps) => {
   return (
     <button
       disabled={disabled}
