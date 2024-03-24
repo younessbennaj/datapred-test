@@ -4,9 +4,14 @@ import { useFetch } from "../hooks/useFetch";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { addAxiosToken } from "../requests/fetchApi";
+import { Label } from "../common/Label";
+import { Button } from "../common/Button";
+
+const inputClassnames =
+  "border border-solid border-gray-300 rounded-md px-4 py-2 w-full";
 
 export const Login = () => {
-  const { data, doFetch, loading } = useFetch("/auth/");
+  const { data, doFetch, loading, error } = useFetch("/auth/");
   const [token, setToken] = useLocalStorage("token", null);
   const navigate = useNavigate();
   const [username, setUserName] = useState("");
@@ -25,7 +30,7 @@ export const Login = () => {
       headers: { Authorization: "Basic " + encodedToken },
     };
 
-    doFetch(config);
+    doFetch({ config });
   };
 
   if (data) {
@@ -36,12 +41,13 @@ export const Login = () => {
   return token ? (
     <Navigate to="/" />
   ) : (
-    <div>
+    <div className="grow flex justify-center items-center flex-col gap-2">
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username</label>
+          <Label htmlFor="username">Username</Label>
           <input
+            className={inputClassnames}
             onChange={handleUserNameChange}
             type="text"
             name="username"
@@ -50,8 +56,9 @@ export const Login = () => {
           />
         </div>
         <div>
-          <label htmlFor="password">Password</label>
+          <Label htmlFor="password">Password</Label>
           <input
+            className={inputClassnames}
             onChange={handlePasswordChange}
             type="password"
             name="password"
@@ -59,8 +66,9 @@ export const Login = () => {
             value={password}
           />
         </div>
-        <button disabled={loading}>Login</button>
+        <Button disabled={loading}>Login</Button>
       </form>
+      {error && <div className="text-red-600">oups, there is an error...</div>}
     </div>
   );
 };

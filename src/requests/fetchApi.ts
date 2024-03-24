@@ -14,3 +14,8 @@ export const addAxiosToken = (token: string) => {
   fetchApi.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   fetchApi.defaults.baseURL = `${API_BASE_URL}/with-auth`;
 };
+
+export const removeAxiosToken = () => {
+  delete fetchApi.defaults.headers.common["Authorization"];
+  fetchApi.defaults.baseURL = `${API_BASE_URL}`;
+};
