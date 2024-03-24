@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-import { Footer } from "./Footer";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { Nav } from "./Nav";
 
@@ -23,12 +22,11 @@ export const Layout = () => {
     },
   ];
   return (
-    <div className="container">
+    <div className="min-h-[100vh] mx-auto w-full px-6 lg:max-w-[1024px] flex flex-col h-full">
       <Nav navItems={navItems} />
-      <div>
+      <div className="grow flex flex-col items-stretch justify-stretch">
         <Outlet />
       </div>
-      <Footer />
     </div>
   );
 };

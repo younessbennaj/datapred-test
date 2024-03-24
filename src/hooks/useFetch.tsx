@@ -23,14 +23,21 @@ export const useFetch = (url?: string) => {
     [setConfig, setLoading]
   );
 
+  const reset = () => {
+    setData(null);
+    setConfig(undefined);
+    setLoading(false);
+    setError(null);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
+      setError(null);
       const requestUrl = config && config.url ? config.url : url ? url : "";
       try {
         const response = await fetchApi.get(requestUrl, config);
         setData(response.data);
       } catch (error: unknown) {
-        console.log("error", error);
         if (axios.isAxiosError(error)) {
           setError(error.message);
         }
@@ -43,5 +50,5 @@ export const useFetch = (url?: string) => {
     }
   }, [url, config, loading]);
 
-  return { data, doFetch, error, loading };
+  return { data, doFetch, error, loading, reset };
 };
