@@ -1,11 +1,11 @@
+import { useLocalStorage } from "@uidotdev/usehooks";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export const Logout = () => {
-  const navigate = useNavigate();
+  const [, setToken] = useLocalStorage("token", null);
   useEffect(() => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  }, [navigate]);
-  return null;
+    setToken(null);
+  }, [setToken]);
+  return <Navigate to="/" />;
 };

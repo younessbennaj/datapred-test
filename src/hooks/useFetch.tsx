@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios, { AxiosRequestConfig } from "axios";
 import { fetchApi } from "../requests/fetchApi";
 
@@ -11,10 +11,13 @@ export const useFetch = (url: string) => {
   );
   const [error, setError] = useState<null | string>(null);
 
-  const doFetch = (config?: AxiosRequestConfig | undefined) => {
-    setConfig(config);
-    setLoading(true);
-  };
+  const doFetch = useCallback(
+    (config?: AxiosRequestConfig | undefined) => {
+      setConfig(config);
+      setLoading(true);
+    },
+    [setConfig, setLoading]
+  );
 
   useEffect(() => {
     const fetchData = async () => {

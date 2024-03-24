@@ -1,10 +1,13 @@
 import * as React from "react";
 import { useState } from "react";
 import { useFetch } from "../hooks/useFetch";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { addAxiosToken } from "../requests/fetchApi";
 
 export const Login = () => {
   const { data, doFetch, loading } = useFetch("/auth/");
+  const [token, setToken] = useLocalStorage("token", null);
   const navigate = useNavigate();
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -26,10 +29,13 @@ export const Login = () => {
   };
 
   if (data) {
-    localStorage.setItem("token", data || "");
+    setToken(data);
+    addAxiosToken(data);
     navigate("/");
   }
-  return (
+  return token ? (
+    <Navigate to="/" />
+  ) : (
     <div>
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>

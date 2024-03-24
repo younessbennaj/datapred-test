@@ -1,24 +1,30 @@
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Footer } from "./Footer";
-import { Header } from "./Header";
+import { useLocalStorage } from "@uidotdev/usehooks";
+import { Nav } from "./Nav";
 
 export const Layout = () => {
+  const [token] = useLocalStorage("token", null);
+  const navItems = [
+    {
+      isActive: true,
+      name: "Home",
+      path: "/",
+    },
+    {
+      isActive: !token,
+      name: "Login",
+      path: "/login",
+    },
+    {
+      isActive: !!token,
+      name: "Logout",
+      path: "/logout",
+    },
+  ];
   return (
     <div className="container">
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/logout">Logout</Link>
-          </li>
-        </ul>
-      </nav>
-      <Header />
+      <Nav navItems={navItems} />
       <div>
         <Outlet />
       </div>
